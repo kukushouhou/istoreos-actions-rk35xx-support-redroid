@@ -56,6 +56,12 @@ if [ -f "$KCONFIG" ]; then
     echo "CONFIG_IKCONFIG_PROC=y" >> $KCONFIG
     echo "CONFIG_MEMFD_CREATE=y" >> $KCONFIG
     
+    # --- 目标 4：KVM 虚拟化支持 ---
+    echo "CONFIG_VIRTUALIZATION=y" >> $KCONFIG
+    echo "CONFIG_KVM=y" >> $KCONFIG
+    echo "CONFIG_VHOST_NET=y" >> $KCONFIG
+    echo "CONFIG_VHOST_VSOCK=y" >> $KCONFIG
+    
     echo "内核参数注入成功！"
 else
     echo "警告: 未找到 $KCONFIG，请检查内核版本或路径！"
