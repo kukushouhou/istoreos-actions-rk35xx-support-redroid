@@ -32,7 +32,7 @@ jobs:
     strategy:
       matrix:
         REPO_BRANCH:
-          - ${{ env.DEFAULT_BRANCH }}
+          - istoreos-24.10
         ARCHITECTURE:
           - rk35xx
         os:
