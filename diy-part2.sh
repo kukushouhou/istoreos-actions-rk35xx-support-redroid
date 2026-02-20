@@ -38,11 +38,17 @@ if [ -f "$KCONFIG" ]; then
     
     # --- 目标 1：进程调度与 Cgroup ---
     sed -i '/CONFIG_CGROUP_SCHED/d' $KCONFIG
+    sed -i '/CONFIG_CPUCTL/d' $KCONFIG
+    sed -i '/CONFIG_SCHEDTUNE/d' $KCONFIG
+    sed -i '/CONFIG_UCLAMP_TASK/d' $KCONFIG
+    sed -i '/CONFIG_UCLAMP_TASK_GROUP/d' $KCONFIG
+    sed -i '/CONFIG_UCLAMP_BUCKETS_COUNT/d' $KCONFIG
     echo "CONFIG_CGROUP_SCHED=y" >> $KCONFIG
     echo "CONFIG_CPUCTL=y" >> $KCONFIG
     echo "CONFIG_SCHEDTUNE=y" >> $KCONFIG
     echo "CONFIG_UCLAMP_TASK=y" >> $KCONFIG
     echo "CONFIG_UCLAMP_TASK_GROUP=y" >> $KCONFIG
+    echo "CONFIG_UCLAMP_BUCKETS_COUNT=5" >> $KCONFIG
 
     # --- 目标 2：Binder 原生集成 (原文已有部分，此处做强制确认) ---
     sed -i '/CONFIG_ANDROID_BINDER/d' $KCONFIG
