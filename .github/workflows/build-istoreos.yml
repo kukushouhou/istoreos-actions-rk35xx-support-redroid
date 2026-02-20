@@ -23,6 +23,8 @@ env:
   UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
   GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
+  # 自动获取默认分支
+  DEFAULT_BRANCH: istoreos-24.10
 
 jobs:
   build:
@@ -30,19 +32,13 @@ jobs:
     strategy:
       matrix:
         REPO_BRANCH:
-          # - main
-          - istoreos-22.03
-          # - istoreos-23.05
+          - ${{ env.DEFAULT_BRANCH }}
         ARCHITECTURE:
           - rk33xx
           - rk35xx
           - x86
         os:
           - ubuntu-22.04
-        include:
-          - REPO_BRANCH: istoreos-23.05
-            ARCHITECTURE: x86-alpha
-            os: ubuntu-22.04
 
       fail-fast: false
 
