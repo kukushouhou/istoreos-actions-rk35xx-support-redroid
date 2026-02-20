@@ -34,9 +34,7 @@ jobs:
         REPO_BRANCH:
           - ${{ env.DEFAULT_BRANCH }}
         ARCHITECTURE:
-          - rk33xx
           - rk35xx
-          - x86
         os:
           - ubuntu-22.04
 
