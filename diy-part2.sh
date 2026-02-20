@@ -63,10 +63,16 @@ if [ -f "$KCONFIG" ]; then
     echo "CONFIG_MEMFD_CREATE=y" >> $KCONFIG
     
     # --- 目标 4：KVM 虚拟化支持 ---
+    sed -i '/CONFIG_VIRTUALIZATION/d' $KCONFIG
+    sed -i '/CONFIG_KVM/d' $KCONFIG
+    sed -i '/CONFIG_VHOST_NET/d' $KCONFIG
+    sed -i '/CONFIG_VHOST_VSOCK/d' $KCONFIG
+    sed -i '/CONFIG_NVHE_EL2_DEBUG/d' $KCONFIG
     echo "CONFIG_VIRTUALIZATION=y" >> $KCONFIG
     echo "CONFIG_KVM=y" >> $KCONFIG
     echo "CONFIG_VHOST_NET=y" >> $KCONFIG
     echo "CONFIG_VHOST_VSOCK=y" >> $KCONFIG
+    echo "# CONFIG_NVHE_EL2_DEBUG is not set" >> $KCONFIG
     
     echo "内核参数注入成功！"
 else
