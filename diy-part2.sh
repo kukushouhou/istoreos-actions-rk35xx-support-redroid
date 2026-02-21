@@ -81,36 +81,51 @@ fi
 
 # 3. 同时在 .config 中添加内核选项（确保编译时启用）
 if [ -f ".config" ]; then
-    echo "正在注入 .config 内核选项..."
+    echo "正在检查并注入 .config 内核选项..."
     
-    # 删除旧的配置
-    sed -i '/CONFIG_KERNEL_ANDROID/d' .config
-    sed -i '/CONFIG_KERNEL_CGROUP_SCHED/d' .config
-    sed -i '/CONFIG_KERNEL_CPUCTL/d' .config
-    sed -i '/CONFIG_KERNEL_SCHEDTUNE/d' .config
-    sed -i '/CONFIG_KERNEL_UCLAMP_TASK/d' .config
-    sed -i '/CONFIG_KERNEL_IKCONFIG/d' .config
-    sed -i '/CONFIG_KERNEL_VIRTUALIZATION/d' .config
-    sed -i '/CONFIG_KERNEL_KVM/d' .config
+    # 检查是否需要添加配置（避免重复）
+    NEED_ANDROID=0
+    NEED_CGROUP=0
+    NEED_KVM=0
     
-    # 添加完整的内核选项
-    echo "CONFIG_KERNEL_ANDROID=y" >> .config
-    echo "CONFIG_KERNEL_ANDROID_BINDER_IPC=y" >> .config
-    echo "CONFIG_KERNEL_ANDROID_BINDERFS=y" >> .config
+    grep -q "CONFIG_KERNEL_ANDROID=y" .config || NEED_ANDROID=1
+    grep -q "CONFIG_KERNEL_CGROUP_SCHED=y" .config || NEED_CGROUP=1
+    grep -q "CONFIG_KERNEL_KVM=y" .config || NEED_KVM=1
     
-    echo "CONFIG_KERNEL_CGROUP_SCHED=y" >> .config
-    echo "CONFIG_KERNEL_CPUCTL=y" >> .config
-    echo "CONFIG_KERNEL_SCHEDTUNE=y" >> .config
-    echo "CONFIG_KERNEL_UCLAMP_TASK=y" >> .config
-    echo "CONFIG_KERNEL_UCLAMP_TASK_GROUP=y" >> .config
-    
-    echo "CONFIG_KERNEL_IKCONFIG=y" >> .config
-    echo "CONFIG_KERNEL_IKCONFIG_PROC=y" >> .config
-    
-    echo "CONFIG_KERNEL_VIRTUALIZATION=y" >> .config
-    echo "CONFIG_KERNEL_KVM=y" >> .config
-    echo "CONFIG_KERNEL_VHOST_NET=y" >> .config
-    echo "CONFIG_KERNEL_VHOST_VSOCK=y" >> .config
-    
-    echo ".config 注入成功！"
+    if [ $NEED_ANDROID -eq 1 ] || [ $NEED_CGROUP -eq 1 ] || [ $NEED_KVM -eq 1 ]; then
+        echo "检测到缺少内核配置，正在注入..."
+        
+        # 删除旧的配置（如果有）
+        sed -i '/CONFIG_KERNEL_ANDROID/d' .config
+        sed -i '/CONFIG_KERNEL_CGROUP_SCHED/d' .config
+        sed -i '/CONFIG_KERNEL_CPUCTL/d' .config
+        sed -i '/CONFIG_KERNEL_SCHEDTUNE/d' .config
+        sed -i '/CONFIG_KERNEL_UCLAMP_TASK/d' .config
+        sed -i '/CONFIG_KERNEL_IKCONFIG/d' .config
+        sed -i '/CONFIG_KERNEL_VIRTUALIZATION/d' .config
+        sed -i '/CONFIG_KERNEL_KVM/d' .config
+        
+        # 添加完整的内核选项
+        echo "CONFIG_KERNEL_ANDROID=y" >> .config
+        echo "CONFIG_KERNEL_ANDROID_BINDER_IPC=y" >> .config
+        echo "CONFIG_KERNEL_ANDROID_BINDERFS=y" >> .config
+        
+        echo "CONFIG_KERNEL_CGROUP_SCHED=y" >> .config
+        echo "CONFIG_KERNEL_CPUCTL=y" >> .config
+        echo "CONFIG_KERNEL_SCHEDTUNE=y" >> .config
+        echo "CONFIG_KERNEL_UCLAMP_TASK=y" >> .config
+        echo "CONFIG_KERNEL_UCLAMP_TASK_GROUP=y" >> .config
+        
+        echo "CONFIG_KERNEL_IKCONFIG=y" >> .config
+        echo "CONFIG_KERNEL_IKCONFIG_PROC=y" >> .config
+        
+        echo "CONFIG_KERNEL_VIRTUALIZATION=y" >> .config
+        echo "CONFIG_KERNEL_KVM=y" >> .config
+        echo "CONFIG_KERNEL_VHOST_NET=y" >> .config
+        echo "CONFIG_KERNEL_VHOST_VSOCK=y" >> .config
+        
+        echo ".config 注入成功！"
+    else
+        echo ".config 中已包含所需内核配置，跳过注入。"
+    fi
 fi
