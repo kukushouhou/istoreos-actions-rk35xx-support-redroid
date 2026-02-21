@@ -95,14 +95,11 @@ if [ -f ".config" ]; then
         echo "CONFIG_KERNEL_ANDROID=y" >> .config
         echo "CONFIG_KERNEL_ANDROID_BINDER_IPC=y" >> .config
         echo "CONFIG_KERNEL_ANDROID_BINDERFS=y" >> .config
-        echo "CONFIG_KERNEL_ASHMEM=y" >> .config
-        echo "CONFIG_KERNEL_DMABUF_HEAPS=y" >> .config
         
         echo "CONFIG_KERNEL_CGROUP_SCHED=y" >> .config
         
         echo "CONFIG_KERNEL_IKCONFIG=y" >> .config
         echo "CONFIG_KERNEL_IKCONFIG_PROC=y" >> .config
-        echo "CONFIG_KERNEL_MEMFD_CREATE=y" >> .config
         
         echo "CONFIG_KERNEL_VIRTUALIZATION=y" >> .config
         echo "CONFIG_KERNEL_KVM=y" >> .config
