@@ -40,19 +40,25 @@ if [ -f "$KCONFIG" ]; then
     sed -i '/CONFIG_CGROUP_SCHED/d' $KCONFIG
     echo "CONFIG_CGROUP_SCHED=y" >> $KCONFIG
 
-    # --- 目标 2：Binder 原生集成 ---
+    # --- 目标 2：Android Binder 和共享内存支持 ---
     sed -i '/CONFIG_ANDROID/d' $KCONFIG
     sed -i '/CONFIG_ASHMEM/d' $KCONFIG
+    sed -i '/CONFIG_DMABUF_HEAPS/d' $KCONFIG
+    sed -i '/CONFIG_UDMABUF/d' $KCONFIG
     echo "CONFIG_ANDROID=y" >> $KCONFIG
     echo "CONFIG_ANDROID_BINDER_IPC=y" >> $KCONFIG
     echo "CONFIG_ANDROID_BINDERFS=y" >> $KCONFIG
     echo "CONFIG_ANDROID_BINDER_DEVICES=\"binder,hwbinder,vndbinder\"" >> $KCONFIG
     echo "CONFIG_ASHMEM=y" >> $KCONFIG
+    echo "CONFIG_DMABUF_HEAPS=y" >> $KCONFIG
+    echo "CONFIG_DMABUF_HEAPS_CMA=y" >> $KCONFIG
+    echo "CONFIG_UDMABUF=y" >> $KCONFIG
 
-    # --- 目标 3：内存与配置导出 (解决 zgrep 报错) ---
+    # --- 目标 3：内存管理配置 (ashmem 和 dma-buf heaps) ---
     echo "CONFIG_IKCONFIG=y" >> $KCONFIG
     echo "CONFIG_IKCONFIG_PROC=y" >> $KCONFIG
     echo "CONFIG_MEMFD_CREATE=y" >> $KCONFIG
+    echo "CONFIG_DMABUF_HEAPS=y" >> $KCONFIG
     
     # --- 目标 4：KVM 虚拟化支持 ---
     sed -i '/CONFIG_VIRTUALIZATION/d' $KCONFIG
