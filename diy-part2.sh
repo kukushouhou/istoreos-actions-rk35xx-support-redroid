@@ -78,3 +78,16 @@ if [ -f "$KCONFIG" ]; then
 else
     echo "警告: 未找到 $KCONFIG，请检查内核版本或路径！"
 fi
+
+# 3. 同时在 .config 中添加内核选项（确保编译时启用）
+if [ -f ".config" ]; then
+    echo "正在注入 .config 内核选项..."
+    sed -i '/CONFIG_KERNEL_ANDROID_BINDER/d' .config
+    sed -i '/CONFIG_KERNEL_CGROUP_SCHED/d' .config
+    sed -i '/CONFIG_KERNEL_KVM/d' .config
+    echo "CONFIG_KERNEL_ANDROID=y" >> .config
+    echo "CONFIG_KERNEL_ANDROID_BINDER_IPC=y" >> .config
+    echo "CONFIG_KERNEL_CGROUP_SCHED=y" >> .config
+    echo "CONFIG_KERNEL_KVM=y" >> .config
+    echo ".config 注入成功！"
+fi
