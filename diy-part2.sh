@@ -36,19 +36,9 @@ KCONFIG="target/linux/rockchip/armv8/config-6.6"
 if [ -f "$KCONFIG" ]; then
     echo "找到内核配置文件: $KCONFIG，正在注入 Android 支持参数..."
     
-    # --- 目标 1：进程调度与 Cgroup ---
+    # --- 目标 1：Cgroup 基础配置（移除 Android 特有的 schedtune） ---
     sed -i '/CONFIG_CGROUP_SCHED/d' $KCONFIG
-    sed -i '/CONFIG_CPUCTL/d' $KCONFIG
-    sed -i '/CONFIG_SCHEDTUNE/d' $KCONFIG
-    sed -i '/CONFIG_UCLAMP_TASK/d' $KCONFIG
-    sed -i '/CONFIG_UCLAMP_TASK_GROUP/d' $KCONFIG
-    sed -i '/CONFIG_UCLAMP_BUCKETS_COUNT/d' $KCONFIG
     echo "CONFIG_CGROUP_SCHED=y" >> $KCONFIG
-    echo "CONFIG_CPUCTL=y" >> $KCONFIG
-    echo "CONFIG_SCHEDTUNE=y" >> $KCONFIG
-    echo "CONFIG_UCLAMP_TASK=y" >> $KCONFIG
-    echo "CONFIG_UCLAMP_TASK_GROUP=y" >> $KCONFIG
-    echo "CONFIG_UCLAMP_BUCKETS_COUNT=5" >> $KCONFIG
 
     # --- 目标 2：Binder 原生集成 ---
     sed -i '/CONFIG_ANDROID/d' $KCONFIG
@@ -100,9 +90,6 @@ if [ -f ".config" ]; then
         # 删除旧的配置（如果有）
         sed -i '/CONFIG_KERNEL_ANDROID/d' .config
         sed -i '/CONFIG_KERNEL_CGROUP_SCHED/d' .config
-        sed -i '/CONFIG_KERNEL_CPUCTL/d' .config
-        sed -i '/CONFIG_KERNEL_SCHEDTUNE/d' .config
-        sed -i '/CONFIG_KERNEL_UCLAMP_TASK/d' .config
         sed -i '/CONFIG_KERNEL_IKCONFIG/d' .config
         sed -i '/CONFIG_KERNEL_VIRTUALIZATION/d' .config
         sed -i '/CONFIG_KERNEL_KVM/d' .config
@@ -111,12 +98,9 @@ if [ -f ".config" ]; then
         echo "CONFIG_KERNEL_ANDROID=y" >> .config
         echo "CONFIG_KERNEL_ANDROID_BINDER_IPC=y" >> .config
         echo "CONFIG_KERNEL_ANDROID_BINDERFS=y" >> .config
+        echo "CONFIG_KERNEL_ASHMEM=y" >> .config
         
         echo "CONFIG_KERNEL_CGROUP_SCHED=y" >> .config
-        echo "CONFIG_KERNEL_CPUCTL=y" >> .config
-        echo "CONFIG_KERNEL_SCHEDTUNE=y" >> .config
-        echo "CONFIG_KERNEL_UCLAMP_TASK=y" >> .config
-        echo "CONFIG_KERNEL_UCLAMP_TASK_GROUP=y" >> .config
         
         echo "CONFIG_KERNEL_IKCONFIG=y" >> .config
         echo "CONFIG_KERNEL_IKCONFIG_PROC=y" >> .config
