@@ -50,12 +50,14 @@ if [ -f "$KCONFIG" ]; then
     echo "CONFIG_UCLAMP_TASK_GROUP=y" >> $KCONFIG
     echo "CONFIG_UCLAMP_BUCKETS_COUNT=5" >> $KCONFIG
 
-    # --- 目标 2：Binder 原生集成 (原文已有部分，此处做强制确认) ---
-    sed -i '/CONFIG_ANDROID_BINDER/d' $KCONFIG
+    # --- 目标 2：Binder 原生集成 ---
+    sed -i '/CONFIG_ANDROID/d' $KCONFIG
+    sed -i '/CONFIG_ASHMEM/d' $KCONFIG
     echo "CONFIG_ANDROID=y" >> $KCONFIG
     echo "CONFIG_ANDROID_BINDER_IPC=y" >> $KCONFIG
     echo "CONFIG_ANDROID_BINDERFS=y" >> $KCONFIG
     echo "CONFIG_ANDROID_BINDER_DEVICES=\"binder,hwbinder,vndbinder\"" >> $KCONFIG
+    echo "CONFIG_ASHMEM=y" >> $KCONFIG
 
     # --- 目标 3：内存与配置导出 (解决 zgrep 报错) ---
     echo "CONFIG_IKCONFIG=y" >> $KCONFIG
